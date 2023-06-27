@@ -1,4 +1,4 @@
-package me.shinsunyoung.springbootdeveloper;
+package sjspring.shop.springbootdeveloper;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
