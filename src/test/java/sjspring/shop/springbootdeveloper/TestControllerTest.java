@@ -1,4 +1,4 @@
-package sjspring.shop.springbootdeveloper;
+package me.shinsunyoung.springbootdeveloper;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,12 +12,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import sjspring.shop.springbootdeveloper.Member;
+import sjspring.shop.springbootdeveloper.MemberRepository;
 
-import java.awt.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -34,33 +33,31 @@ class TestControllerTest {
     private MemberRepository memberRepository;
 
     @BeforeEach
-    public void mockMvcSetup(){
+    public void mockMvcSetUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .build();
     }
 
     @AfterEach
-    public void cleanup(){
+    public void cleanUp() {
         memberRepository.deleteAll();
     }
 
-    @DisplayName("getAllmembers: 아티클 조회에 성공한다.")
+    @DisplayName("getAllMembers: 아티클 조회에 성공합니다.")
     @Test
-    public void getAllMembers() throws Exception{
-        //given
+    public void getAllMembers() throws Exception {
+        // given
         final String url = "/test";
-        Member saveMember = memberRepository.save(new Member(1L, "홍킬동"));
+        Member savedMember = memberRepository.save(new Member(1L, "홍길동"));
 
-        //when
+        // when
         final ResultActions result = mockMvc.perform(get(url)
                 .accept(MediaType.APPLICATION_JSON));
 
-        //then
+        // then
         result
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(savedMember.getId()))
                 .andExpect(jsonPath("$[0].name").value(savedMember.getName()));
-
     }
-
 }

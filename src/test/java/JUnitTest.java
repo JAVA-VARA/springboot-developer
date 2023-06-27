@@ -13,15 +13,16 @@ public class JUnitTest {
 
         Assertions.assertEquals(a+b, sum); //값이 같은지 확인
     }
-    @DisplayName("1+3는 4이다") //테스트 이름
-    @Test
-    public void junitFailedTest(){
-        int a = 1;
-        int b = 2;
-        int sum = 3;
-
-        Assertions.assertEquals(a+b, sum); //값이 같은지 확인g
-
-    }
-
 }
+
+//    @DisplayName("1+3는 4이다") //테스트 이름
+//    @Test
+//    public void junitFailedTest(){
+//        int a = 1;
+//        int b = 2;
+//        int sum = 4;
+//
+//        Assertions.assertEquals(a+b, sum); //값이 같은지 확인g
+//
+//    }
+
