@@ -1,4 +1,4 @@
-package sjspring.shop.springbootdeveloper.controller;
+package sjspring.shop.springbootdeveloper.controller.Controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
