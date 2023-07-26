@@ -1,0 +1,56 @@
+name: CI/CD  #깃허브 액션 이름
+
+on:
+  push:
+    branches: [ master ]  #maser branch에 push할 때 마다 ci 실행.
+
+jobs:
+  build:
+    runs-on: ubuntu-latest #실행 환경
+
+    #실행 스텝 지정
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew clean build # 그래프를 사용해 프로젝트를 빌드 이전 상태로 돌리고 다시 빌드하는 명령어 실행
+
+        #use: 지정한 리포지토리를 확인하고 코드에 대한 작업 실행.
+        #name: 스텝의 이름 저장
+        #run: 실행할 명령어 입력.
+
+        #현재 시간 가져오기
+      - name: Get current time
+        uses: josStorer/get-current-time@v2.0.2 #플로그인을 통해 현재 시간을 가져온다.
+        id: current-time
+        with:
+          format: YYYY-MM-DD-mm-ss
+          utcOffset: "+09:00"
+
+      #배포용 패키지 경로 저장
+      - name: Set artifact
+        #빌드 이후 생성된 .jar파일을 찾아 artifact라는 환경변수에 값을 넣어준다.
+        #그 후 GITHUB_ENV를 사용해 깃허브 워크플로 전체적으로 사용할  수 있는 환경 변수를 설정한다
+        run: echo "artifact=$(ls ./build.libs)" >> $GITHUB_ENV
+
+
+     # 빈스토크 배포
+      - name: Beanstalk Deploy
+        uses: einaregilsson/beanstalk-deploy@v20 #플로그인을 통해 빈스토크 배포를 진행한다.
+        with:
+          aws_access_key: ${{secrets.AWS_ACCESS_KEY_ID}} #깃허브 액션에서 가져오는 값 / AWS에서 만든 뒤 깃허브에 설정한다
+          aws_secrets_key: ${{secrets.AWS_SECRET_ACCESS_KEY}} #깃허브 액션에서 가져오는 값 / AWS에서 만든 뒤 깃허브에 설정한다
+          application_name: Springboot-developer
+          environment_name: Springboot-developer-env
+          version_label: gitbuh-action-${{steps.current-time.outputs.formattedTime}}
+          region: ap-northeast-2
+          deployment_package: ./build/libs/${{env.artifact}}
+
