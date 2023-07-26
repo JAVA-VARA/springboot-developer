@@ -50,7 +50,7 @@ jobs:
           aws_secret_key: ${{secrets.AWS_SECRET_ACCESS_KEY}} #깃허브 액션에서 가져오는 값 / AWS에서 만든 뒤 깃허브에 설정한다
           application_name: Springboot-developer
           environment_name: Springboot-developer-env
-          version_label: gitbuh-action-${{steps.current-time.outputs.formattedTime}}
+          version_label: github-action-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
           deployment_package: ./build/libs/${{env.artifact}}
 
